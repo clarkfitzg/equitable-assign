@@ -5,6 +5,11 @@ Idea for a talk:
     1. _Independent_ random assignment of K reviewers to each application.
     2. Balancing the work by randomly assigning each reviewer the same number
        of applications.
+
+
+Some conventions
+
+workload counts the number of applications each reviewer is assigned.
 '''
 
 
@@ -178,13 +183,13 @@ def counts_off(d):
 
 if __name__ == "__main__":
 
-    assign(6, 5, 2)
+    a1 = assign(6, 5, 2)
 
     assign(10, 5, 2)
 
-    a = assign(110, 12, 3)
+#    a = assign(110, 12, 3)
 
-    b = assign(323, 5, 2, seed=123)
+#    b = assign(323, 5, 2, seed=123)
 
     # First this worked instantly, now it takes time?
 
