@@ -67,7 +67,74 @@ def assign(A: int, N: int, K: int, seed=None, verbose=True) -> list:
     return result
 
 
-def assign_remaining(A: int, N: int, K: int, verbose=True) -> list:
+# Possible trading schemes.
+# TODO: Experiment more with these!
+############################################################
+
+def fast_trade(include, exclude, workload):
+    """
+    Make the first good trade we find to improve the balance of the workload.
+
+    We trade a combination with the most load for one with the smallest load.
+    """
+    workorder = workload.most_common()
+    over = workorder[0][0]
+    under = workorder[-1][0]
+
+    for combo in include:
+        #if over in combo and under not in combo:
+        if over in combo:
+            outcombo = combo
+
+    for combo in exclude:
+        #if under in combo and over not in combo:
+        if under in combo:
+            incombo = combo
+
+    return incombo, outcombo
+
+
+def over_under_trade(include, exclude, workload):
+    """
+    Make the first possible trade such that the least loaded reviewer gets another unit of work and the most loaded reviewer gets one less unit of work.
+
+    TODO: Doesn't work
+    """
+    workorder = workload.most_common()
+    over = workorder[0][0]
+    under = workorder[-1][0]
+
+    for combo in include:
+        #if over in combo and under not in combo:
+        if over in combo:
+            if under not in combo:
+                outcombo = combo
+
+    for combo in exclude:
+        #if under in combo and over not in combo:
+        if under in combo:
+            if over not in combo:
+                incombo = combo
+
+    return incombo, outcombo
+
+
+def best_trade(include, exclude, workload):
+    """
+    Make the best possible trade of one combination between include and exclude
+    to improve the balance of the workload.
+
+    We can understand this as finding the most loaded combination of workers
+    and replacing it with the least loaded.
+    """
+    score = lambda x: sum(workload[i] for i in x)
+    outcombo = max(include, key=score)
+    incombo = min(exclude, key=score)
+
+    return incombo, outcombo
+
+
+def assign_remaining(A: int, N: int, K: int, verbose=True, trade=fast_trade) -> list:
     """
     Assign work when A < (N choose K)
 
@@ -108,7 +175,7 @@ def assign_remaining(A: int, N: int, K: int, verbose=True) -> list:
         workload[r] += 0
 
     while counts_off(workload):
-        incombo, outcombo = fast_trade(include, exclude, workload)
+        incombo, outcombo = trade(include, exclude, workload)
         include.discard(outcombo)
         exclude.add(outcombo)
         exclude.discard(incombo)
@@ -119,44 +186,6 @@ def assign_remaining(A: int, N: int, K: int, verbose=True) -> list:
             workload[i] -= 1
 
     return [tuple(sorted(c)) for c in include]
-
-
-def fast_trade(include, exclude, workload):
-    """
-    Make the first good trade we find to improve the balance of the workload.
-
-    We trade a combination with the most load for one with the smallest load.
-    """
-    workorder = workload.most_common()
-    over = workorder[0][0]
-    under = workorder[-1][0]
-
-    for combo in include:
-        #if over in combo and under not in combo:
-        if over in combo:
-            outcombo = combo
-
-    for combo in exclude:
-        #if under in combo and over not in combo:
-        if under in combo:
-            incombo = combo
-
-    return incombo, outcombo
-
-
-def best_trade(include, exclude, workload):
-    """
-    Make the best possible trade of one combination between include and exclude
-    to improve the balance of the workload.
-
-    We can understand this as finding the most loaded combination of workers
-    and replacing it with the least loaded.
-    """
-    score = lambda x: sum(workload[i] for i in x)
-    outcombo = max(include, key=score)
-    incombo = min(exclude, key=score)
-
-    return incombo, outcombo
 
 
 def optimal(assignments):
