@@ -107,18 +107,22 @@ def random_trade(include, exclude, workload, debug=False):
     idx_exclude = range(len(exclude))
 
     while True:
-        i = random.choice(idx_include)
-        combo = include[i]
+        idx_out = random.choice(idx_include)
+        combo = include[idx_out]
         if over in combo:
-            outcombo = include.pop(i)
             break
 
     while True:
-        i = random.choice(idx_exclude)
-        combo = exclude[i]
+        idx_in = random.choice(idx_exclude)
+        combo = exclude[idx_in]
         if under in combo:
-            incombo = exclude.pop(i)
             break
+
+    # update include and exclude
+    outcombo = include.pop(idx_out)
+    incombo = exclude.pop(idx_in)
+    include.append(incombo)
+    exclude.append(outcombo)
 
     if debug:
         print(incombo)
@@ -253,14 +257,14 @@ if __name__ == "__main__":
     assign(10, 5, 2)
 
     random.seed(214890) 
-    a2 = assign(20, 12, 3, debug=True)
+    a2 = assign(20, 12, 3, debug=False)
 
-    #a0 = assign(109, 12, 3)
+    a0 = assign(109, 12, 3)
 
     #a0 = assign(109, 12, 3)
     #a = assign(110, 12, 3)
 
-#    b = assign(323, 5, 2, seed=123)
+    b = assign(323, 5, 2)
 
     # First this worked instantly, now it takes time?
 
@@ -268,7 +272,7 @@ if __name__ == "__main__":
 #    math.comb(15, 5)
 #
 
-#    %time c = assign(999, 15, 5, seed=8023)
+#    %time c = assign(999, 15, 5)
 #
 
 #    %time c = assign(999, 15, 5)
