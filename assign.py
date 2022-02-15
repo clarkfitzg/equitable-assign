@@ -19,7 +19,7 @@ import math
 import random
 
 
-def assign(A: int, N: int, K: int, seed=None, verbose=True) -> list:
+def assign(A: int, N: int, K: int, seed=None, verbose=True, **kwargs) -> list:
     """
     Assign N reviewers to A applications as equitably as possible, meaning
     the conditions below hold.
@@ -39,6 +39,8 @@ def assign(A: int, N: int, K: int, seed=None, verbose=True) -> list:
        combination of reviewers (+/- 1). This means that a particular combination
        of reviewers won't have a stronger or weaker voice compared to any other
        combination.
+
+    kwargs are keyword arguments for the trading function
     """
     random.seed(seed)
 
@@ -49,7 +51,7 @@ def assign(A: int, N: int, K: int, seed=None, verbose=True) -> list:
     combos = list(itertools.combinations(reviewers, K))
     result = n_each_combo * combos
 
-    remaining = assign_remaining(Aremain, N, K)
+    remaining = assign_remaining(Aremain, N, K, **kwargs)
     result.extend(remaining)
     random.shuffle(result)
 
@@ -71,27 +73,57 @@ def assign(A: int, N: int, K: int, seed=None, verbose=True) -> list:
 # TODO: Experiment more with these!
 ############################################################
 
-def fast_trade(include, exclude, workload):
+def fast_trade(include, exclude, workload, debug=False):
     """
     Make the first good trade we find to improve the balance of the workload.
 
     We trade a combination with the most load for one with the smallest load.
+
+    TODO: This cycles.
     """
     workorder = workload.most_common()
     over = workorder[0][0]
     under = workorder[-1][0]
 
     for combo in include:
-        #if over in combo and under not in combo:
         if over in combo:
             outcombo = combo
 
     for combo in exclude:
-        #if under in combo and over not in combo:
         if under in combo:
             incombo = combo
 
     return incombo, outcombo
+
+
+def random_trade(include, exclude, workload):
+    """
+    Make the first good random trade we find to improve the balance of the workload.
+
+    We trade a combination with the most load for one with the smallest load.
+    """
+    workorder = workload.most_common()
+    over = workorder[0][0]
+    under = workorder[-1][0]
+    idx_include = range(len(include))
+    idx_exclude = range(len(exclude))
+
+    while True:
+        i = random.choice(idx_include)
+        combo = include[i]
+        if over in combo:
+            outcombo = include.pop(i)
+            break
+
+    while True:
+        i = random.choice(idx_exclude)
+        combo = exclude[i]
+        if under in combo:
+            incombo = exclude.pop(i)
+            break
+
+    return incombo, outcombo
+
 
 
 def over_under_trade(include, exclude, workload):
@@ -134,7 +166,7 @@ def best_trade(include, exclude, workload):
     return incombo, outcombo
 
 
-def assign_remaining(A: int, N: int, K: int, verbose=True, trade=fast_trade) -> list:
+def assign_remaining(A: int, N: int, K: int, verbose=True, trade=random_trade, **kwargs) -> list:
     """
     Assign work when A < (N choose K)
 
@@ -154,6 +186,9 @@ def assign_remaining(A: int, N: int, K: int, verbose=True, trade=fast_trade) -> 
            each trade improves the workload balance.
         3. Iterate the trading until balance is achieved.
 
+    TODO: It's the responsibility of the trade function to mutate the lists include and exclude to keep them consistent.
+    random_trade currently is the only one that does this.
+
     """
     if A == 0:
         return []
@@ -166,8 +201,8 @@ def assign_remaining(A: int, N: int, K: int, verbose=True, trade=fast_trade) -> 
     keep = set(random.sample(index, A))
     nokeep = set(index).difference(keep)
 
-    include = {allcombos[i] for i in keep}
-    exclude = {allcombos[i] for i in nokeep}
+    include = [allcombos[i] for i in keep]
+    exclude = [allcombos[i] for i in nokeep]
     workload = Counter(itertools.chain(*include))
 
     # It's possible that some reviewers weren't assigned any.
@@ -175,11 +210,11 @@ def assign_remaining(A: int, N: int, K: int, verbose=True, trade=fast_trade) -> 
         workload[r] += 0
 
     while counts_off(workload):
-        incombo, outcombo = trade(include, exclude, workload)
-        include.discard(outcombo)
-        exclude.add(outcombo)
-        exclude.discard(incombo)
-        include.add(incombo)
+        incombo, outcombo = trade(include, exclude, workload, **kwargs)
+        #include.discard(outcombo)
+        #exclude.add(outcombo)
+        #exclude.discard(incombo)
+        #include.add(incombo)
         for i in incombo:
             workload[i] += 1
         for i in outcombo:
@@ -216,7 +251,13 @@ if __name__ == "__main__":
 
     assign(10, 5, 2)
 
-#    a = assign(110, 12, 3)
+    random.seed(214890) 
+    a2 = assign(20, 12, 3)
+
+    #a0 = assign(109, 12, 3)
+
+    #a0 = assign(109, 12, 3)
+    #a = assign(110, 12, 3)
 
 #    b = assign(323, 5, 2, seed=123)
 
