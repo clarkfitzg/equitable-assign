@@ -19,7 +19,7 @@ import math
 import random
 
 
-def assign(A: int, N: int, K: int, seed=None, verbose=True, **kwargs) -> list:
+def assign(A: int, N: int, K: int, verbose=True, **kwargs) -> list:
     """
     Assign N reviewers to A applications as equitably as possible, meaning
     the conditions below hold.
@@ -42,8 +42,6 @@ def assign(A: int, N: int, K: int, seed=None, verbose=True, **kwargs) -> list:
 
     kwargs are keyword arguments for the trading function
     """
-    random.seed(seed)
-
     reviewers = range(1, N+1)
 
     n_each_combo, Aremain = divmod(A, math.comb(N, K))
@@ -96,7 +94,7 @@ def fast_trade(include, exclude, workload, debug=False):
     return incombo, outcombo
 
 
-def random_trade(include, exclude, workload):
+def random_trade(include, exclude, workload, debug=False):
     """
     Make the first good random trade we find to improve the balance of the workload.
 
@@ -121,6 +119,9 @@ def random_trade(include, exclude, workload):
         if under in combo:
             incombo = exclude.pop(i)
             break
+
+    if debug:
+        print(incombo)
 
     return incombo, outcombo
 
@@ -252,7 +253,7 @@ if __name__ == "__main__":
     assign(10, 5, 2)
 
     random.seed(214890) 
-    a2 = assign(20, 12, 3)
+    a2 = assign(20, 12, 3, debug=True)
 
     #a0 = assign(109, 12, 3)
 
