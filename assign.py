@@ -266,6 +266,12 @@ if __name__ == "__main__":
 
     b = assign(323, 5, 2)
 
+
+    math.comb(77, 9) / 1e9
+    # 161 billion combinations is simply too many.
+    # Use a different approach.
+    #c = assign(253, 77, 9)
+
     # First this worked instantly, now it takes time?
 
 #
