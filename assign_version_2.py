@@ -37,6 +37,7 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
 
     for value in d_of_arrays.items():
         good = good_indices(workload,wpp)
+
         #make a list to be used for sorting
         sorting_list = [None] * len(good)
         for i in range(0,len(good)):
@@ -47,26 +48,31 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
         #where the indices which have the lowest values will appear at the 
         #begining of the list
         sample = [x for _,x in sorted(zip(sorting_list,good))]
-        """
-        NOT WORKING:this was an approach I took to try and fix 
-        the problem with the overlap
-        choose the max workload
-        max = workload[sample[K-1]]
-        randomly take values from sample under max 
+        
+        #NOT WORKING:this was an approach I took to try and fix 
+        #the problem with the overlap
+        #choose the max workload
+        dog = sample[K-1] #why does K+1 work?
+        mx = workload[dog]
+        #randomly take values from sample under max 
         arr = []
         for i in sample:
-            if(workload[i] <= max):
+            if(workload[i] <= mx):
                 arr.append(i)
         
-        sample = [lambda x: workload[x] <= max, sample]
-        sample = random.sample(arr,K) 
-        go through an flip on the values sample wants us to flip and increment
-        workload
-        """
+        #sample = [lambda x: workload[x] <= max, sample]
+        #sample = random.sample(arr,K)
+        random.shuffle(arr)
+        sample = sample[:K]
+        #go through an flip on the values sample wants us to flip and increment
+        #workload
+        
         #since sample is already sorted in ascending order we can just take 
         #the first K indices from it
-        sample = sample[:K] 
+        #sample = sample[:K] 
         #flip the indices to one
+        
+
         for i in sample:
             value[1][i] = 1
             workload[i] += 1
@@ -86,7 +92,7 @@ def good_indices(workload,wpp):
 
 if __name__ == "__main__":
 
-        assign(6, 5, 3)
+        assign(10, 9, 6)
 
 
 
