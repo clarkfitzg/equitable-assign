@@ -31,7 +31,7 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     slips = []
     for i in range(1,A+1):
         for j in range(0,K): #we could probably do this with numpy too
-            slips.append(i)
+             slips.append(i)
 
     #shake up the hat
     random.shuffle(slips)
@@ -59,7 +59,45 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
 
         if not slips:
             break
+
+    #trade until they are at equatiably assigned 
+
+    #if they can be perfectly assigned 
+    if(((A*K)%N)==0):
+        while(len({len(x) for x in line_of_rev_dict.values()}) > 1):
+            trade(line_of_rev_dict)
+    #if they can't be perfectly assigned 
+    if(((A*K)%N)!=0):
+        while(len({len(x) for x in line_of_rev_dict.values()}) > 2):
+            trade(line_of_rev_dict)
+
     return line_of_rev_dict
+
+#make a function that takes the person with the most slips and 
+#donates one to the lowest 
+def trade(d):
+    #find the key with longest array 
+    mx = 0
+    for key in d:
+        if(len(d[key])>=mx):
+                mx = len(d[key])
+                mx_key = key
+    #find the key with the shortest arrayi
+    mn = 10000000
+    for key in d:
+        if(len(d[key])<=mn):
+                mn = len(d[key])
+                mn_key = key
+    #take an element from the array of the key with the most 
+    #assignment and give one of those assignments to the lowest 
+    for i in range(0,len(d[mx_key])):
+        if d[mx_key][i] not in d[mn_key]:
+            #print(d[mx_key][i])
+            d[mn_key].append(d[mx_key][i])
+            d[mx_key].pop(i)
+            break
+    return d
+
 
 def add_values_in_dict(sample_dict, key, list_of_values):
     ''' Append multiple values to a key in 
