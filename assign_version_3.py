@@ -108,7 +108,11 @@ def add_values_in_dict(sample_dict, key, list_of_values):
     return sample_dict
 
 
-    
 if __name__ == "__main__":
     print(assign(60, 5, 4))
+
+    out = assign(19, 4, 2)
+    for a in out.values():
+        a.sort()
+    assignments = list(out.values())
 
