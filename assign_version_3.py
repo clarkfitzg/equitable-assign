@@ -95,8 +95,8 @@ def trade(d):
             #print(d[mx_key][i])
             d[mn_key].append(d[mx_key][i])
             d[mx_key].pop(i)
-            break
-    return d
+            break     
+    return list(d.values())
 
 
 def add_values_in_dict(sample_dict, key, list_of_values):
@@ -106,6 +106,7 @@ def add_values_in_dict(sample_dict, key, list_of_values):
         sample_dict[key] = list()
     sample_dict[key].extend(list_of_values)
     return sample_dict
+
 
     
 if __name__ == "__main__":
