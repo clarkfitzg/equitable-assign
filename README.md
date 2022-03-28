@@ -28,10 +28,10 @@ Here we assign 10 tasks to 5 workers, with 2 workers per task, which means each 
 We use 2022 as the random seed, but it can be any integer.
 
 ```
-python -m equiassign --tasks 10 --workers 5 --pertask 2 --seed 2022
+python -m equiassign --tasks 10 --workers 5 --pertask 2 --seed 2022 --saveas assignments.csv
 ```
 
-The result prints a random assignment of workers to tasks in CSV format to standard output.
+The result saves a random assignment of workers to tasks to `assignments.csv`
 
 ```
 1,4
