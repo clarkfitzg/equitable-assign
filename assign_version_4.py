@@ -121,20 +121,21 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--tasks',type=int,required=True)
-    parser.add_argument('--workers',type=int,required=True)
-    parser.add_argument('--pertask',type=int,required=True)
-    parser.add_argument('--seed',type=int,required=True)
-    parser.add_argument('--allworkers',type=str,required=True)
+    parser.add_argument('--workers',type=int,default=2)
+    parser.add_argument('--pertask',type=int,default=1)
+    parser.add_argument('--seed',type=int,default=None)
+    parser.add_argument('--allworkers',type=str,default=True)
 
     args = parser.parse_args()
 
     A = args.tasks
     N = args.workers
     K = args.pertask
-
+    random.seed(args.seed)
     data = list(assign(A,N,K))
     #data = [(1,2,3),(4,5,6),(7,8,9)]
     
+    #put an error if file already exists
 
     with open(args.allworkers,'w') as out:
         file_writer=csv.writer(out)
