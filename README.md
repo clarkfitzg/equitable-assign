@@ -27,8 +27,14 @@ The simplest way is to use it from the command line.
 Here we assign 10 tasks to 5 workers, with 2 workers per task, which means each worker will be assigned 4 tasks.
 We use 2022 as the random seed, but it can be any integer.
 
+once we have it on pi py
 ```
 python -m equiassign --tasks 10 --workers 5 --pertask 2 --seed 2022 --allworkers assignments.csv
+```
+
+this is if you run it locally
+```
+python equiassign.py --tasks 10 --workers 5 --pertask 2 --seed 2022 --allworkers assignments.csv
 ```
 
 The result saves a random assignment of workers to tasks to `assignments.csv`
