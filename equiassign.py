@@ -1,7 +1,8 @@
 import random
 import math
 import argparse
-import csv 
+import csv
+import os.path
 
 """
 This approach is very simple
@@ -23,6 +24,7 @@ one by one giving them a single slip and then wrap back around once we have
 gone to the end of the line. If the reviewer already has one of the slips we
 assign them we will give them a new slip and put that one back in the hat.
 
+It is possible that towards the end some of the reviewers will already have all the slips that are in the remaining hat so they will be skipped and another reviewer could be given more. Hence, an unoptimal assignment. We address this by having the reviewer with the most assignments give one of their assigments to the reviewer with the fewest. 
 """
 
 
@@ -30,7 +32,7 @@ assign them we will give them a new slip and put that one back in the hat.
 def assign(A: int, N: int, K: int, verbose=True, **kwargs):
 
     #if the user inputed a larger number of reviewers per application than there are reviewers 
-    if(N<K):
+    if(N<K):  
         raise ValueError("pertask needs to be smaller than workers")
     #if any are negative 
     if(A <= 0 or N<= 0 or K<= 0):
@@ -79,8 +81,18 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     if(((A*K)%N)!=0):
         while(len({len(x) for x in line_of_rev_dict.values()}) > 2):
             trade(line_of_rev_dict)
+    
+    #put the dictionary into a list of tuples 
+    alpha = list(tuple(sub) for sub in line_of_rev_dict.values()) 
+    
+    #sort the list of tuples
+    for i in range(0,len(alpha)):
+        alpha[i] = tuple(sorted(alpha[i]))
 
-    return tuple(tuple(sub) for sub in line_of_rev_dict.values()) 
+    #make the list into a tuple 
+    alpha = tuple(alpha)
+
+    return alpha  
 
 #make a function that takes the person with the most slips and 
 #donates one to the lowest 
@@ -123,6 +135,7 @@ if __name__ == "__main__":
     parser.add_argument('--tasks',type=int,required=True)
     parser.add_argument('--workers',type=int,default=2)
     parser.add_argument('--pertask',type=int,default=1)
+    parser.add_argument('--viewtype',type=int,default=0) #0 for worker view and #1 for task view
     parser.add_argument('--seed',type=int,default=None)
     parser.add_argument('--allworkers',type=str,default=True)
 
@@ -132,17 +145,49 @@ if __name__ == "__main__":
     N = args.workers
     K = args.pertask
     random.seed(args.seed)
-    data = list(assign(A,N,K))
+    #data = list(assign(A,N,K))
     #data = [(1,2,3),(4,5,6),(7,8,9)]
     
-    #put an error if file already exists
+    #put an error if assignments.csv already exists
+    file_exists = os.path.exists(args.allworkers)
+    if(file_exists):
+        print("The csv file already exists so please delete or rename it") 
 
-    with open(args.allworkers,'w') as out:
-        file_writer=csv.writer(out)
-        file_writer.writerows(data)
+    
+    #convert the tuple of tuples into a list of list
+    data = assign(A,N,K)
+    data = [list(x) for x in data]
+
+    #worker view
+    if(not file_exists and args.viewtype == 0):
+        #I would add a reviewer to each list so we can identify them
+        for i in range(0,len(data)):
+            data[i].insert(0,"worker{0}".format(i+1))
+
+        #put them in a csv file
+        with open(args.allworkers,'w') as out:
+            file_writer=csv.writer(out)
+            file_writer.writerows(data)
 
          
-            
+     #task view
+    if(not file_exists and args.viewtype == 1):
+         #tranform data from being lists of tasks and the task they need to do to lists of tasks and their corresponding worker
+         
+        tasksArr = [[] for x in range(A)]
+
+         #loop through data and see which workers have the tasks and then assign them to that array in tasksArr
+        for i in range(1,A+1):
+            for j in range(0,len(data)):
+                if(i in data[j]):
+                    tasksArr[i-1].append(j+1) 
+
+        for i in range(0,len(tasksArr)):
+            tasksArr[i].insert(0,"task{0}".format(i+1))
+
+        with open(args.allworkers,'w') as out:
+            file_writer=csv.writer(out)
+            file_writer.writerows(tasksArr)
 
 
     
