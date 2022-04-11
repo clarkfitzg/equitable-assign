@@ -62,12 +62,12 @@ Worker view:
 
 once we have it on pi py
 ```
-python -m equiassign --tasks 10 --workers 5 --pertask 2 --viewtype 0 --seed 2022 --allworkers assignments.csv
+python3 -m equiassign --tasks 10 --workers 5 --pertask 2 --viewtype 0 --seed 2022 --allworkers assignments.csv
 ```
 
 this is if you run it locally
 ```
-python equiassign.py --tasks 10 --workers 5 --pertask 2 --viewtype 0 --seed 2022 --allworkers assignments.csv
+python3 equiassign.py --tasks 10 --workers 5 --pertask 2 --viewtype 0 --seed 2022 --allworkers assignments.csv
 ```
 
 The result saves a random assignment of workers to tasks to `assignments.csv`
@@ -81,3 +81,29 @@ worker5,2,3,5,9
 ```
 
 This output means that the first worker is assigned to tasks 1,3,4,9, the second worker is assigned to tastks 2,7,8,10, and the last worker (5th) is assigned to tasks 2,3,5,9.
+
+
+## Discussion
+
+
+```
+worker,task1,task2,task3,task4
+1,1,3,4,9
+2,2,7,8,
+3,4,6,7,8
+4,1,5,6,
+5,2,3,5,9
+
+
+task,worker1,worker2
+1,1,4
+2,2,5
+3,1,5
+4,1,3
+5,4,5
+6,3,4
+7,2,3
+8,2,3
+9,1,5
+10,2,4
+```
