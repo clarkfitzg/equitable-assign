@@ -37,30 +37,38 @@ The simplest way is to use it from the command line.
 Here we assign 10 tasks to 5 workers, with 2 workers per task, which means each worker will be assigned 4 tasks.
 We use 2022 as the random seed, but it can be any integer.
 
-# Task view:
+### Task view:
 
 once we have it on pi py
 ```
-python -m equiassign --tasks 10 --workers 5 --pertask 2 --viewtype 1 --seed 2022 --allworkers assignments.csv
+python3 -m equiassign --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 2022 --allworkers assignments.csv
 ```
 
 this is if you run it locally
 ```
-python equiassign.py --tasks 10 --workers 5 --pertask 2 --viewtype 1 --seed 2022 --allworkers assignments.csv
+python equiassign.py --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 2022 --allworkers assignments.csv
 ```
 
 The result saves a random assignment of workers to tasks to `assignments.csv`
 
 ```
-task1,1,4
-task2,2,5
-...
-task10,2,4
+task,worker1,worker2,worker3
+1,2,3,4
+2,1,3,5
+3,2,4,5
+4,1,4,5
+5,1,3,5
+6,1,2,3
+7,1,2,4
+8,2,3,5
+9,1,2,4
+10,2,3,4
+11,1,4,5
 ```
 
-This output means that the first task is assigned to workers 1 and 4, the second task is assigned to workers 2 and 5, and the last (10th) task is assigned to workers 2 and 4.
+This output means that the first task is assigned to workers 1,2, and 3, the second task is assigned to workers 1,3, and 5, and the last (11th) task is assigned to workers 1,4, and 5.
 
-# Worker view:
+### Worker view:
 
 once we have it on pi py
 ```
@@ -83,10 +91,26 @@ worker,task1,task2,task3,task4,task5,task6,task7
 5,2,3,4,5,8,11,
 ```
 
-This output means that the first worker is assigned to tasks 1,3,4,9, the second worker is assigned to tastks 2,7,8,10, and the last worker (5th) is assigned to tasks 2,3,5,9.
+This output means that the first worker is assigned to tasks 2,4,5,6,7,9,and 11, the second worker is assigned to tasks 1,3,6,7,8,9, and 10 , and the last worker (5th) is assigned to tasks 2,3,4,5,8, and 11.
 
 
-# Directory 
+### Directory: 
+
+once we have it on pi py
+```
+python3 -m equiassign --tasks 11 --workers 5 --pertask 3 --viewtype 2 --seed 2022 --dirname assignments
+```
+
+this is if you run it locally
+```
+python3 equiassign.py --tasks 11 --workers 5 --pertask 3 --viewtype 2 --seed 2022 --dirname assignments
+```
+The directory `assignments` with 5 files corresponding to each worker. Every file contains the tasks that the worker would need to do.
+
+`assignments/worker1`
+```
+2,4,5,6,7,9,11
+```
 
 
 
