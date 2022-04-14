@@ -138,6 +138,7 @@ if __name__ == "__main__":
     parser.add_argument('--viewtype',type=int,default=0) #0 for worker view and #1 for task view
     parser.add_argument('--seed',type=int,default=None)
     parser.add_argument('--allworkers',type=str,default=True)
+    parser.add_argument('--dirname',type=str,default=True)
 
     args = parser.parse_args()
 
@@ -145,12 +146,11 @@ if __name__ == "__main__":
     N = args.workers
     K = args.pertask
     random.seed(args.seed)
-    #data = list(assign(A,N,K))
-    #data = [(1,2,3),(4,5,6),(7,8,9)]
     
-    #put an error if assignments.csv already exists
+    
+    #put an error if assignments.csv already exists and no dirname
     file_exists = os.path.exists(args.allworkers)
-    if(file_exists):
+    if(file_exists and args.viewtype != 2):
         print("The csv file already exists so please delete or rename it") 
 
     
@@ -209,7 +209,20 @@ if __name__ == "__main__":
         with open(args.allworkers,'w') as out:
             file_writer=csv.writer(out)
             file_writer.writerow(fields)
-            file_writer.writerows(tasksArr) 
+            file_writer.writerows( tasksArr) 
 
 
-    
+    #if they decide to make a directory 
+    if(args.viewtype == 2):   
+        #error if the directory already exists
+        if not ( os.path.isdir(args.dirname)):
+            #make the directory
+            os.mkdir(args.dirname)
+            #loop through each list in data and generate a file for that list
+            for i in range(0,len(data)):
+                file_name = args.dirname + "/" + "worker{0}".format(i+1)
+                with open(file_name, 'w') as out:
+                    file_writer=csv.writer(out)
+                    file_writer.writerow(data[i])
+        else:
+            print("directory already exists")
