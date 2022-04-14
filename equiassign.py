@@ -158,15 +158,31 @@ if __name__ == "__main__":
     data = assign(A,N,K)
     data = [list(x) for x in data]
 
+
     #worker view
     if(not file_exists and args.viewtype == 0):
+        
+ 
+        #add a None to all the lists that are less than the longest one 
+        dataMaxLen = max([len(x) for x in data])
+        for i in data:
+            if(len(i) < dataMaxLen):
+                i.append(None)  
+
         #I would add a reviewer to each list so we can identify them
         for i in range(0,len(data)):
-            data[i].insert(0,"worker{0}".format(i+1))
+            data[i].insert(0,i+1)
+
+
+        #make a fields label which will first have worker then the max of how many tasks there will be per worker    
+        fields = ["worker"]
+        for i in range(1,max([len(x) for x in data])):
+            fields.append("task{0}".format(i))
 
         #put them in a csv file
         with open(args.allworkers,'w') as out:
             file_writer=csv.writer(out)
+            file_writer.writerow(fields)
             file_writer.writerows(data)
 
          
@@ -183,11 +199,17 @@ if __name__ == "__main__":
                     tasksArr[i-1].append(j+1) 
 
         for i in range(0,len(tasksArr)):
-            tasksArr[i].insert(0,"task{0}".format(i+1))
+            tasksArr[i].insert(0,i+1)
+
+        #make a fields label which will first have worker then the max of how many tasks there will be per worker    
+        fields = ["task"]
+        for i in range(1,K+1):
+            fields.append("worker{0}".format(i))
 
         with open(args.allworkers,'w') as out:
             file_writer=csv.writer(out)
-            file_writer.writerows(tasksArr)
+            file_writer.writerow(fields)
+            file_writer.writerows(tasksArr) 
 
 
     
