@@ -147,6 +147,8 @@ if __name__ == "__main__":
     K = args.pertask
     random.seed(args.seed)
     
+    # Just call a function after this.
+    # Everything that follows can be inside function(s).
     
     #put an error if assignments.csv already exists and no dirname
     file_exists = os.path.exists(args.allworkers)
