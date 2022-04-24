@@ -129,6 +129,69 @@ def add_values_in_dict(sample_dict, key, list_of_values):
     return sample_dict
 
 
+def worker_view(data):
+    #add a None to all the lists that are less than the longest one 
+    dataMaxLen = max([len(x) for x in data])
+    for i in data:
+        if(len(i) < dataMaxLen):
+            i.append(None)  
+
+    #I would add a reviewer to each list so we can identify them
+    for i in range(0,len(data)):
+        data[i].insert(0,i+1)
+
+
+    #make a fields label which will first have worker then the max of how many tasks there will be per worker    
+    fields = ["worker"]
+    for i in range(1,max([len(x) for x in data])):
+        fields.append("task{0}".format(i))
+
+    #put them in a csv file
+    with open(args.allworkers,'w') as out:
+        file_writer=csv.writer(out)
+        file_writer.writerow(fields)
+        file_writer.writerows(data)
+
+def task_view(data,A):
+     #tranform data from being lists of tasks and the task they need to do to lists of tasks and their corresponding worker 
+    tasksArr = [[] for x in range(A)]
+
+     #loop through data and see which workers have the tasks and then assign them to that array in tasksArr
+    for i in range(1,A+1):
+        for j in range(0,len(data)):
+            if(i in data[j]):
+                tasksArr[i-1].append(j+1) 
+
+    for i in range(0,len(tasksArr)):
+        tasksArr[i].insert(0,i+1)
+
+    #make a fields label which will first have worker then the max of how many tasks there will be per worker    
+    fields = ["task"]
+    for i in range(1,K+1):
+        fields.append("worker{0}".format(i))
+
+    with open(args.allworkers,'w') as out:
+        file_writer=csv.writer(out)
+        file_writer.writerow(fields)
+        file_writer.writerows( tasksArr) 
+
+def dir_view(dirname,data):
+    #error if the directory already exists
+     if not ( os.path.isdir(dirname)):
+        #make the directory
+        os.mkdir(dirname)
+        #loop through each list in data and generate a file for that list
+        for i in range(0,len(data)):
+            file_name = dirname + "/" + "worker{0}".format(i+1)
+            with open(file_name, 'w') as out:
+                file_writer=csv.writer(out)
+                file_writer.writerow(data[i])
+     else:
+         print("directory already exists")
+
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -160,11 +223,11 @@ if __name__ == "__main__":
     data = assign(A,N,K)
     data = [list(x) for x in data]
 
-
+    
     #worker view
     if(not file_exists and args.viewtype == 0):
-        
- 
+        worker_view(data)
+        """ 
         #add a None to all the lists that are less than the longest one 
         dataMaxLen = max([len(x) for x in data])
         for i in data:
@@ -186,12 +249,18 @@ if __name__ == "__main__":
             file_writer=csv.writer(out)
             file_writer.writerow(fields)
             file_writer.writerows(data)
-
+"""
          
      #task view
     if(not file_exists and args.viewtype == 1):
-         #tranform data from being lists of tasks and the task they need to do to lists of tasks and their corresponding worker
-         
+        task_view(data,A)
+    
+    #directory view
+    if(args.viewtype == 2):
+        dir_view(args.dirname,data)
+
+"""
+         #tranform data from being lists of tasks and the task they need to do to lists of tasks and their corresponding worker 
         tasksArr = [[] for x in range(A)]
 
          #loop through data and see which workers have the tasks and then assign them to that array in tasksArr
@@ -211,20 +280,25 @@ if __name__ == "__main__":
         with open(args.allworkers,'w') as out:
             file_writer=csv.writer(out)
             file_writer.writerow(fields)
-            file_writer.writerows( tasksArr) 
-
-
+            file_writer.w riterows( tasksArr) 
+"""
+    
     #if they decide to make a directory 
-    if(args.viewtype == 2):   
+    #if(args.viewtype == 2):
+        #print(2+2)
+        #dirname = args.dirname
+        #dir_view(args.dirname,data)
+"""
         #error if the directory already exists
-        if not ( os.path.isdir(args.dirname)):
+         if not ( os.path.isdir(dirname)):
             #make the directory
-            os.mkdir(args.dirname)
+            os.mkdir(dirname)
             #loop through each list in data and generate a file for that list
             for i in range(0,len(data)):
-                file_name = args.dirname + "/" + "worker{0}".format(i+1)
+                file_name = dirname + "/" + "worker{0}".format(i+1)
                 with open(file_name, 'w') as out:
                     file_writer=csv.writer(out)
                     file_writer.writerow(data[i])
         else:
             print("directory already exists")
+            """

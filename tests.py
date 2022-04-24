@@ -1,7 +1,7 @@
 from equiassign import *
-
+import os
 import unittest
-
+"""
 class TestStringMethods(unittest.TestCase):
 
     def test_len(self):
@@ -40,6 +40,33 @@ class TestStringMethods(unittest.TestCase):
         alpha = [len(x) for x in a] 
         diff = max(alpha) - min(alpha)
         self.assertEqual(diff,1)
+"""
+class TestFiles(unittest.TestCase):
+    def setUp(self):
+        #create a temporary directory
+        self.test_dir = tempfile.mktemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.test_dir)
+
+    def text_dir_view(self):
+        data = assign(10,5,3)
+        data = [list(x) for x in data]
+
+        dirname = path.join(self.test_dir, "assignments")
+
+        dir_view(dirname,data)
+
+        #make sure there are 5 files 
+        intial_count = 0
+        for path in os.listdir(dirname):
+            if of.path.isfile(os.path.join(dirname,path)):
+                initial_count +=1
+
+        self.assertEqual(initial_count,5)
+
+
+
 
 
 if __name__ == '__main__':
