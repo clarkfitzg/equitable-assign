@@ -5,7 +5,7 @@ import shutil
 
 from equiassign import *
 
-"""
+
 class TestStringMethods(unittest.TestCase):
 
     def test_len(self):
@@ -44,7 +44,7 @@ class TestStringMethods(unittest.TestCase):
         alpha = [len(x) for x in a] 
         diff = max(alpha) - min(alpha)
         self.assertEqual(diff,1)
-"""
+
 
 class TestFiles(unittest.TestCase):
     def setUp(self):

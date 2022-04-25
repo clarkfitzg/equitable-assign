@@ -46,7 +46,7 @@ python3 -m equiassign --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 202
 
 this is if you run it locally
 ```
-python equiassign.py --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 2022 --allworkers assignments.csv
+python3 equiassign.py --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 2022 --allworkers assignments.csv
 ```
 
 The result saves a random assignment of workers to tasks to `assignments.csv`
