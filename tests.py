@@ -1,6 +1,10 @@
-from equiassign import *
 import os
 import unittest
+import tempfile
+import shutil
+
+from equiassign import *
+
 """
 class TestStringMethods(unittest.TestCase):
 
@@ -41,26 +45,28 @@ class TestStringMethods(unittest.TestCase):
         diff = max(alpha) - min(alpha)
         self.assertEqual(diff,1)
 """
+
 class TestFiles(unittest.TestCase):
     def setUp(self):
         #create a temporary directory
         self.test_dir = tempfile.mktemp()
+        os.mkdir(self.test_dir)
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
 
-    def text_dir_view(self):
+    def test_dir_view(self):
         data = assign(10,5,3)
         data = [list(x) for x in data]
 
-        dirname = path.join(self.test_dir, "assignments")
+        dirname = os.path.join(self.test_dir, "assignments")
 
         dir_view(dirname,data)
 
         #make sure there are 5 files 
-        intial_count = 0
+        initial_count = 0
         for path in os.listdir(dirname):
-            if of.path.isfile(os.path.join(dirname,path)):
+            if os.path.isfile(os.path.join(dirname,path)):
                 initial_count +=1
 
         self.assertEqual(initial_count,5)
