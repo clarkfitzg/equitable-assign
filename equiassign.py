@@ -183,9 +183,10 @@ def dir_view(dirname,data):
         #loop through each list in data and generate a file for that list
         for i in range(0,len(data)):
             file_name = dirname + "/" + "worker{0}".format(i+1)
-            with open(file_name, 'w') as out:
-                file_writer=csv.writer(out)
-                file_writer.writerow(data[i])
+            for j in range(0,len(data[i])):
+                with open(file_name, 'a') as out:
+                    file_writer=csv.writer(out)
+                    file_writer.writerow([data[i][j]])
      else:
          print("directory already exists")
 
