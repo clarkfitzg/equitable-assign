@@ -4,6 +4,8 @@ import argparse
 import csv
 import os.path
 
+# TODO (1) run through pep8 tool and maybe pyflakes
+
 """
 This approach is very simple
 Veriables (all positive integers):
@@ -30,7 +32,14 @@ It is possible that towards the end some of the reviewers will already have all 
 
 
 def assign(A: int, N: int, K: int, verbose=True, **kwargs):
+    """
+    TODO: Write docstring with examples demoing use.
 
+    >>> a = assign(10, 20, 30)
+    """
+
+# TODO (1) add tests to verify this behavior.
+# TODO (2) add code coverage checking.
     #if the user inputed a larger number of reviewers per application than there are reviewers 
     if(N<K):  
         raise ValueError("pertask needs to be smaller than workers")
@@ -47,15 +56,22 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     #shake up the hat
     random.shuffle(slips)
 
+# TODO (0) clean up language / variable names in code and comments to be consistent with
+#   workers and tasks
+
     #line the people up i.e. make a dictionary with an array
     #to store many values 
     line_of_rev_dict = {}
     for i in range(1,N+1):
         line_of_rev_dict["reviewer{0}".format(i)] = []
 
+# TODO (1) DRY: "reviewer{0}".format could be in a helper function
+
+# TODO (0) can we iterate through slips directly?
+# Or use while loop
+# Check out itertools.cycle()
+
     #go through each reviewer and give them something from the hat
-    #QUESTION:do we need to go further than len(slips)+1? Maybe use a while loop
-    #dog = len(slips)+1
     for i in range(1,1000000000): #big number
         i = i%N
         if(i==0):
@@ -73,6 +89,8 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
 
     #trade until they are at equatiably assigned 
 
+    # TODO (1) 
+
     #if they can be perfectly assigned 
     if(((A*K)%N)==0):
         while(len({len(x) for x in line_of_rev_dict.values()}) > 1):
@@ -81,7 +99,7 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     if(((A*K)%N)!=0):
         while(len({len(x) for x in line_of_rev_dict.values()}) > 2):
             trade(line_of_rev_dict)
-    
+
     #put the dictionary into a list of tuples 
     alpha = list(tuple(sub) for sub in line_of_rev_dict.values()) 
     
@@ -93,6 +111,13 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     alpha = tuple(alpha)
 
     return alpha  
+
+
+# TODO (0) simplify
+# def trade(d):
+#     d.sort(key=len)
+#
+#       consider iterating directly over d and using d.index()
 
 #make a function that takes the person with the most slips and 
 #donates one to the lowest 
@@ -194,9 +219,10 @@ def dir_view(dirname,data):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='TODO: write me')
 
-    parser.add_argument('--tasks',type=int,required=True)
+# TODO (1) add documentation for these, and main documentation
+    parser.add_argument('--tasks',type=int,required=True, help='TODO: task help')
     parser.add_argument('--workers',type=int,default=2)
     parser.add_argument('--pertask',type=int,default=1)
     parser.add_argument('--viewtype',type=int,default=0) #0 for worker view and #1 for task view
@@ -224,6 +250,7 @@ if __name__ == "__main__":
     data = assign(A,N,K)
     data = [list(x) for x in data]
 
+# TODO (0) delete what we need to below
     
     #worker view
     if(not file_exists and args.viewtype == 0):
