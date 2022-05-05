@@ -7,6 +7,15 @@ from equiassign import *
 
 
 class TestStringMethods(unittest.TestCase):
+    #give an illeagle input for the tasks
+    def test_input_tasks(self):
+        with self.assertRaises(ValueError):
+            assign(-1,4,3)
+    
+    #give an illeagle input where number of workers per task is larger than the number of workers
+    def test_worker_per_task_illogical(self):
+        with self.assertRaises(ValueError):
+            assign(15,6,7)
 
     def test_len(self):
         a = assign(19, 4, 2)
@@ -14,7 +23,7 @@ class TestStringMethods(unittest.TestCase):
 
     #test if there are a total of 8 "slips" for task17 assigned to the workers
     def test_total_slips(self):
-        a = assign(96,15,8)
+        a  = assign(96,15,8)
         total = sum(x.count(17) for x in a) 
         self.assertEqual(total,8)
 
@@ -70,10 +79,6 @@ class TestFiles(unittest.TestCase):
                 initial_count +=1
 
         self.assertEqual(initial_count,5)
-
-
-
-
 
 if __name__ == '__main__':
     unittest.main()

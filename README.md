@@ -26,15 +26,15 @@ Options:
 6. `allworkers` csv file where ouput will be printed
 7. `dirname` this will make a directory and the csv files of the directory will be the tasks that each individual worker needs to complete
 
-Viewtype:
+## Viewtype:
 
 This provides the user with the option of storing their output in either worker view or taskview.
 Worker view has the first entry of each line as which worker, from 1 to the value of `workers`, and is followed by the tasks that that worker needs to do.
 Task view has the first entry of each line as which task, from 1 to the value of `tasks`, and is followed by the workers that correspond to that task.  
 Directory creates a directory with csv files for each worker that contain the tasks that the worker needs to complete. 
 
-The simplest way is to use it from the command line.
-Here we assign 10 tasks to 5 workers, with 2 workers per task, which means each worker will be assigned 4 tasks.
+The simplest way is to use it is from the command line.
+Here we assign 11 tasks to 5 workers, with 3 workers per task, which means that some workers will have more tasks than others since there is not a perfectly equitable assignment. 
 We use 2022 as the random seed, but it can be any integer.
 
 ### Task view:
@@ -92,7 +92,7 @@ worker,task1,task2,task3,task4,task5,task6,task7
 ```
 
 This output means that the first worker is assigned to tasks 2,4,5,6,7,9,and 11, the second worker is assigned to tasks 1,3,6,7,8,9, and 10 , and the last worker (5th) is assigned to tasks 2,3,4,5,8, and 11.
-
+Note that it was not possible to give every worker an equal number of tasks thus some have more than others. 
 
 ### Directory: 
 
@@ -107,35 +107,15 @@ python3 equiassign.py --tasks 11 --workers 5 --pertask 3 --viewtype 2 --seed 202
 ```
 The directory `assignments` with 5 files corresponding to each worker. Every file contains the tasks that the worker would need to do.
 
+Below is an example of what one of the files would appear as. 
+
 `assignments/worker1`
 ```
-2,4,5,6,7,9,11
-```
-
-
-
-
-## Discussion
-
-
-```
-worker,task1,task2,task3,task4
-1,1,3,4,9
-2,2,7,8,
-3,4,6,7,8
-4,1,5,6,
-5,2,3,5,9
-
-
-task,worker1,worker2
-1,1,4
-2,2,5
-3,1,5
-4,1,3
-5,4,5
-6,3,4
-7,2,3
-8,2,3
-9,1,5
-10,2,4
+2
+4
+5
+6
+7
+9
+11
 ```
