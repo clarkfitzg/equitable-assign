@@ -6,7 +6,7 @@ import os.path
 # TODO (1) run through pep8 tool and maybe pyflakes
 
 def assign(A: int, N: int, K: int, verbose=True, **kwargs):
-    """
+    """ 
     Generates a random assignment of tasks to workers.
     
     Variables (all positive integers):
@@ -100,7 +100,7 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
 
     #if they can be perfectly assigned 
     if(((A*K)%N)==0):
-        while(len({len(x) for x in line_of_rev_dict.values()}) > 1):
+         while(len({len(x) for x in line_of_rev_dict.values()}) > 1):
             trade(line_of_rev_dict)
     else: #if they can't be perfectly assigned 
         while(len({len(x) for x in line_of_rev_dict.values()}) > 2):
@@ -123,41 +123,23 @@ def worker_key(i):
     return "worker{0}".format(i) 
 
 # TODO (0) simplify 
-#DID: it is a dictionary so can't sort this way
+#DID: simplified
 
-"""
 def trade(d):
-    d.sort(key=len)
-#       consider iterating directly over d and using d.index()
-"""
- 
-def trade(d):
-    """ 
-    make a function that takes the person with the most slips and 
-    donates one to the lowest   
     """
-    #find the key with longest array 
-    mx = 0
-    for key in d:
-        if(len(d[key])>=mx):
-                mx = len(d[key])
-                mx_key = key
-    #find the key with the shortest array
-    mn = 10000000
-    for key in d:
-        if(len(d[key])<=mn):
-                mn = len(d[key])
-                mn_key = key
+    take the person with the most slips and donate one to the person
+    with the lowest slips
+    """
+    mx_key = max(d.items(), key = lambda x: len(x[1]))[0]
+    mn_key = min(d.items(), key = lambda x: len(x[1]))[0]
     #take an element from the array of the key with the most 
-    #task and give one of those tasks to the lowest 
+    #tasks and give one of those tasks to the lowest 
     for i in range(0,len(d[mx_key])):
         if d[mx_key][i] not in d[mn_key]:
-            #print(d[mx_key][i])
             d[mn_key].append(d[mx_key][i])
             d[mx_key].pop(i)
             break      
     return list(d.values())
-
 
 def add_values_in_dict(sample_dict, key, list_of_values):
     ''' Append multiple values to a key in 
@@ -166,7 +148,6 @@ def add_values_in_dict(sample_dict, key, list_of_values):
         sample_dict[key] = list()
     sample_dict[key].extend(list_of_values)
     return sample_dict
-
 
 def worker_view(data):
     #add a None to all the lists that are less than the longest one 
