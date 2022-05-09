@@ -34,14 +34,7 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     >>> [[1, 2, 3, 5], [1, 2, 3, 4], [1, 3, 4, 5], [2, 4, 5]]
 
     """
-    
-    """
-    TODO: Write docstring with examples demoing use.
 
-    >>> a = assign(10, 20, 30)
-    """
-
-# TODO (1) add tests to verify this behavior.
 # TODO (2) add code coverage checking.
     #if the user inputed a larger number of workers per task than there are workers 
     if(N<K):  
@@ -59,23 +52,11 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     #shake up the hat
     random.shuffle(slips)
 
-# TODO (0) clean up language / variable names in code and comments to be consistent with
-#   workers and tasks
-#DID: I changed all the names
-
     #line the people up i.e. make a dictionary with an array
     #to store many values 
     line_of_rev_dict = {}
     for i in range(1,N+1):
         line_of_rev_dict[worker_key(i)] = []
-
-# TODO (1) DRY: "worker{0}".format could be in a helper function
-#DID: I made a help function called worker_key(i)
-
-# TODO (0) can we iterate through slips directly?
-# Or use while loop
-# Check out itertools.cycle()
-#DID:I used a while loop instead of a for loop
 
     #go through each worker and give them something from the hat
     i = 1 
@@ -94,9 +75,6 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
         i += 1
 
     #trade until they are at equatiably assigned 
-
-    # TODO (1) 
-    #DID: since it is a dictionary I think this is the best approach
 
     #if they can be perfectly assigned 
     if(((A*K)%N)==0):
@@ -122,8 +100,6 @@ def worker_key(i):
     """
     return "worker{0}".format(i) 
 
-# TODO (0) simplify 
-#DID: simplified
 
 def trade(d):
     """
@@ -136,8 +112,8 @@ def trade(d):
     #tasks and give one of those tasks to the lowest 
     for i in range(0,len(d[mx_key])):
         if d[mx_key][i] not in d[mn_key]:
-            d[mn_key].append(d[mx_key][i])
-            d[mx_key].pop(i)
+            t = d[mx_key].pop(i)
+            d[mn_key].append(t)
             break      
     return list(d.values())
 
@@ -211,7 +187,7 @@ def dir_view(dirname,data):
          print("directory already exists")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='TODO: write me')
+    parser = argparse.ArgumentParser(description='Generate a random equitable assignment of tasks to workers.')
 
 # TODO (1) add documentation for these, and main documentation
     parser.add_argument('--tasks',type=int,required=True, help='TODO: task help')
@@ -220,7 +196,7 @@ if __name__ == "__main__":
     parser.add_argument('--viewtype',type=int,default=0,help='whether you want worker view (0), task view (1), or directory (2), defualt to worker view (0)')
     parser.add_argument('--seed',type=int,default=None,help='integer to seed the random number generator, ensuring the same output')
     parser.add_argument('--allworkers',type=str,default=True,help='csv file where ouput will be printed')
-    parser.add_argument('--dirname',type=str,default=True,help='this will make a directory and the csv files of the directory will be the tasks that each individual worker needs to complete')
+    parser.add_argument('--dirname',type=str,default=True,help='this will make a directory with a file for each individual worker containing all of their task assignments')
 
     args = parser.parse_args()
 
@@ -237,9 +213,6 @@ if __name__ == "__main__":
     #make the assignments 
     data = assign(A,N,K)
 
-# TODO (0) delete what we need to below
-# DID: deleted the comments that were below
-    
     #worker view
     if(not file_exists and args.viewtype == 0):
         worker_view(data)
@@ -251,4 +224,3 @@ if __name__ == "__main__":
     #directory view
     if(args.viewtype == 2):
         dir_view(args.dirname,data)
-

@@ -1,2 +1,2 @@
-test: tests.py equiassign.py
+test: test.py equiassign.py
 	python3 $<
