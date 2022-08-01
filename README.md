@@ -12,7 +12,9 @@ keywords: equity, diversity, algorithm, software, randomization, workload
 
 ## Installation
 
-TODO: Upload to Pypi, figure out how to install on a fresh machine.
+```
+python3 -m pip install equitable_assign
+```
 
 ## Usage
 
@@ -41,7 +43,7 @@ We use 2022 as the random seed, but it can be any integer.
 
 once we have it on pi py
 ```
-python3 -m equiassign --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 2022 --allworkers assignments.csv
+python3 -m equiassign.equiassign --tasks 11 --workers 5 --pertask 3 --viewtype 1 --seed 2022 --allworkers assignments.csv
 ```
 
 this is if you run it locally
