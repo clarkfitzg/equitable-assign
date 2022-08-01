@@ -56,7 +56,7 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     #to store many values 
     line_of_rev_dict = {}
     for i in range(1,N+1):
-        line_of_rev_dict[worker_key(i)] = []
+        line_of_rev_dict[_worker_key(i)] = []
 
     #go through each worker and give them something from the hat
     i = 1 
@@ -66,8 +66,8 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
             i = N
         #hand them the slip if they don't have it 
         for j in range(0,len(slips)):
-            if slips[j] not in line_of_rev_dict[worker_key(i)]:
-                line_of_rev_dict = add_values_in_dict(line_of_rev_dict, worker_key(i), [slips[j]])
+            if slips[j] not in line_of_rev_dict[_worker_key(i)]:
+                line_of_rev_dict = _add_values_in_dict(line_of_rev_dict, _worker_key(i), [slips[j]])
                 slips.pop(j)
                 break
         if not slips: #once we run out of slips break out of the function
@@ -79,10 +79,10 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     #if they can be perfectly assigned 
     if(((A*K)%N)==0):
          while(len({len(x) for x in line_of_rev_dict.values()}) > 1):
-            trade(line_of_rev_dict)
+            _trade(line_of_rev_dict)
     else: #if they can't be perfectly assigned 
         while(len({len(x) for x in line_of_rev_dict.values()}) > 2):
-            trade(line_of_rev_dict)
+            _trade(line_of_rev_dict)
 
     #put the dictionary into a list of lists 
     alpha = list(list(sub) for sub in line_of_rev_dict.values()) 
@@ -94,14 +94,14 @@ def assign(A: int, N: int, K: int, verbose=True, **kwargs):
     return alpha  
 
 
-def worker_key(i):
+def _worker_key(i):
     """
     helper function for making worker key
     """
     return "worker{0}".format(i) 
 
 
-def trade(d):
+def _trade(d):
     """
     take the person with the most slips and donate one to the person
     with the lowest slips
@@ -118,7 +118,7 @@ def trade(d):
     return list(d.values())
 
 
-def add_values_in_dict(sample_dict, key, list_of_values):
+def _add_values_in_dict(sample_dict, key, list_of_values):
     ''' Append multiple values to a key in 
         the given dictionary '''
     if key not in sample_dict:
@@ -127,7 +127,7 @@ def add_values_in_dict(sample_dict, key, list_of_values):
     return sample_dict
 
 
-def worker_view(data):
+def _worker_view(data):
     #add a None to all the lists that are less than the longest one 
     dataMaxLen = max([len(x) for x in data])
     for i in data:
@@ -151,7 +151,7 @@ def worker_view(data):
         file_writer.writerows(data) 
 
 
-def task_view(data,A):
+def _task_view(data,A):
      #tranform data from being lists of tasks and the task they need to do to lists of tasks and their corresponding worker 
     tasksArr = [[] for x in range(A)]
 
@@ -167,7 +167,7 @@ def task_view(data,A):
     #make a fields label which will first have worker then the max of how many tasks there will be per worker    
     fields = ["task"]
     for i in range(1,K+1):
-        fields.append(worker_key(i))
+        fields.append(_worker_key(i))
 
     with open(args.allworkers,'w') as out:
         file_writer=csv.writer(out)
@@ -175,14 +175,14 @@ def task_view(data,A):
         file_writer.writerows(tasksArr) 
 
 
-def dir_view(dirname,data):
+def _dir_view(dirname,data):
     #error if the directory already exists
      if not ( os.path.isdir(dirname)):
         #make the directory
         os.mkdir(dirname)
         #loop through each list in data and generate a file for that list
         for i in range(0,len(data)):
-            file_name = dirname + "/" + worker_key(i+1)
+            file_name = dirname + "/" + _worker_key(i+1)
             for j in range(0,len(data[i])):
                 with open(file_name, 'a') as out:
                     file_writer=csv.writer(out)
@@ -220,12 +220,12 @@ if __name__ == "__main__":
 
     #worker view
     if(not file_exists and args.viewtype == 0):
-        worker_view(data)
+        _worker_view(data)
         
      #task view
     if(not file_exists and args.viewtype == 1):
-        task_view(data, A)
+        _task_view(data, A)
     
     #directory view
     if(args.viewtype == 2):
-        dir_view(args.dirname,data)
+        _dir_view(args.dirname,data)
