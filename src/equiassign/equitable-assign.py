@@ -117,6 +117,7 @@ def trade(d):
             break      
     return list(d.values())
 
+
 def add_values_in_dict(sample_dict, key, list_of_values):
     ''' Append multiple values to a key in 
         the given dictionary '''
@@ -124,6 +125,7 @@ def add_values_in_dict(sample_dict, key, list_of_values):
         sample_dict[key] = list()
     sample_dict[key].extend(list_of_values)
     return sample_dict
+
 
 def worker_view(data):
     #add a None to all the lists that are less than the longest one 
@@ -148,6 +150,7 @@ def worker_view(data):
         file_writer.writerow(fields)
         file_writer.writerows(data) 
 
+
 def task_view(data,A):
      #tranform data from being lists of tasks and the task they need to do to lists of tasks and their corresponding worker 
     tasksArr = [[] for x in range(A)]
@@ -171,6 +174,7 @@ def task_view(data,A):
         file_writer.writerow(fields)
         file_writer.writerows(tasksArr) 
 
+
 def dir_view(dirname,data):
     #error if the directory already exists
      if not ( os.path.isdir(dirname)):
@@ -186,15 +190,16 @@ def dir_view(dirname,data):
      else:
          print("directory already exists")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate a random equitable assignment of tasks to workers.')
 
 # TODO (1) add documentation for these, and main documentation
-    parser.add_argument('--tasks',type=int,required=True, help='TODO: task help')
-    parser.add_argument('--workers',type=int,default=2,help='number of tasks')
-    parser.add_argument('--pertask',type=int,default=1,help='number of workers, default to 2')
-    parser.add_argument('--viewtype',type=int,default=0,help='whether you want worker view (0), task view (1), or directory (2), defualt to worker view (0)')
-    parser.add_argument('--seed',type=int,default=None,help='integer to seed the random number generator, ensuring the same output')
+    parser.add_argument('--tasks',type=int,required=True, help='number of tasks')
+    parser.add_argument('--workers',type=int,default=2,help='total number of workers, default to 2')
+    parser.add_argument('--pertask',type=int,default=1,help='number of workers required per task')
+    parser.add_argument('--viewtype',type=int,default=0,help='whether you want the default worker view (0), task view (1), or directory (2)')
+    parser.add_argument('--seed',type=int,default=None,help='ensure the same random assignment, useful for reproducing assignments')
     parser.add_argument('--allworkers',type=str,default=True,help='csv file where ouput will be printed')
     parser.add_argument('--dirname',type=str,default=True,help='this will make a directory with a file for each individual worker containing all of their task assignments')
 
