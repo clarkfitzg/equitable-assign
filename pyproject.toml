@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "equitable-assign"
-version = "22.9.0"
+version = "22.9.2"
 authors = [
   { name="Shawheen Naderi", email="snaderi@csus.edu" },
   { name="Clark Fitzgerald", email="fitzgerald@csus.edu" },
