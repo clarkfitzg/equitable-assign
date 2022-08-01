@@ -3,6 +3,8 @@ import argparse
 import csv
 import os.path
 
+__all__ = ['assign']
+
 # TODO (1) run through pep8 tool and maybe pyflakes
 
 def assign(A: int, N: int, K: int, verbose=True, **kwargs):

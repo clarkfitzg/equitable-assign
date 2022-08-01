@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "equitable-assign"
-version = "22.9.2"
+name = "equitable_assign"
+version = "22.8.0"
 authors = [
   { name="Shawheen Naderi", email="snaderi@csus.edu" },
   { name="Clark Fitzgerald", email="fitzgerald@csus.edu" },
